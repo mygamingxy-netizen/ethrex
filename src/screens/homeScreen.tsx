@@ -1,13 +1,12 @@
 import Banner from './components/banner'
 import NavBar from './components/navbar';
 import ShowGrid from './components/Grid';
-import { projectFirestore } from '../firebase/config';
+import { getMediaList } from '../data/source';
 import LoadingScreen from './components/loadingScreen';
 import { useEffect, useState } from 'react';
 
 export default function HomeScreen(props: any) {
 
-    const mediaRef = projectFirestore.collection('mediaList');
     const [mediaPack, setMediaPack] = useState<any>([]);
     const [trendingMedia, setTrendingMedia] = useState<any>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -16,16 +15,14 @@ export default function HomeScreen(props: any) {
     useEffect(() => { getMedia(); }, [])
 
     const getMedia = () => {
-        let pack: any = [];
-        mediaRef.get().then(querySnapshot => {
-            querySnapshot.docs.forEach(doc => pack.push(doc.data()))
+        getMediaList().then((pack: any) => {
             const trendPack = pack.filter((item: any) => item.trending === true);
             setTrendingMedia(trendPack)
             if (props.mediaPage !== 'home') {
                 setMediaPack(pack.filter((item: any) => item.mediaType === props.mediaPage));
             } else (setMediaPack(pack))
             setIsLoading(false)
-        }).catch((error) => { alert("Error" + error) })
+        }).catch(() => { setIsLoading(false) })
     }
 
     return (

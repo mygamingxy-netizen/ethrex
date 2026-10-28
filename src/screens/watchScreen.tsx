@@ -6,62 +6,85 @@ import LoadingScreen from "./components/loadingScreen";
 import PrimaryButton from "./components/primaryButton";
 import { FaCommentDots } from 'react-icons/fa';
 import { LoggedIn, UserEmail } from "./features/localState";
-import { RiAccountCircleFill } from "react-icons/ri";
+import { RiAccountCircleFill } from 'react-icons/ri';
+import { getMedia } from "../data/source";
 
 export default function WatchScreen() {
 
     const history = useHistory()
-    const mediaRef = projectFirestore.collection('mediaList');
     const routeData: any = history.location.state;
     const userEmail = UserEmail();
     const loggedIn = LoggedIn();
 
     const [currentMedia, setCurrentMedia] = useState<any>([]);
+    const [isRemote, setIsRemote] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [refresh, setReload] = useState<boolean>(true);
+    const [loadError, setLoadError] = useState<string>('');
     const likeDisabled = loggedIn ? false : true
     const commentDisabled = loggedIn ? false : true;
     const [comment, setComment] = useState<string>('');
 
-
-    useEffect(() => { getCurrentMedia() }, [refresh])
+    useEffect(() => { getCurrentMedia() }, [])
 
     const getCurrentMedia = () => {
-        let pack: any = [];
-        mediaRef.doc(routeData.docId).onSnapshot((doc: any) => {
-            pack.push(doc.data())
-            setCurrentMedia(pack)
-            setIsLoading(false)
+        if (!routeData || !routeData.docId) {
+            setLoadError('This title could not be opened.');
+            setIsLoading(false);
+            return;
+        }
+        getMedia(routeData.docId).then(({ item, remote }) => {
+            setCurrentMedia([item]);
+            setIsRemote(remote);
+            setIsLoading(false);
+        }).catch(() => {
+            setLoadError('This title could not be opened.');
+            setIsLoading(false);
         })
     }
 
+    // Remote titles are written back to Firestore; bundled titles keep their likes and
+    // comments for as long as the app is open.
+    const persist = (patch: any) => {
+        if (!isRemote) return;
+        projectFirestore.collection('mediaList').doc(routeData.docId)
+            .set(patch, { merge: true })
+            .catch(() => { /* catalogue project unavailable - the local edit already landed */ });
+    }
 
     const addLike = () => {
-        if (!likeDisabled || userEmail !== null) {
-            const checkLike = currentMedia[0].mediaLikes.filter((item: any) => item.user === userEmail);
-            if (checkLike.length === 1) {
-                alert("You already liked this movie")
-            } else {
-                mediaRef.doc(routeData.docId).set(
-                    { mediaLikes: [...currentMedia[0].mediaLikes, { user: `${userEmail}` }] },
-                    { merge: true })
-                setReload(!refresh)
-            }
-        } else { alert("Login before Like") }
+        if (!loggedIn || !userEmail) { alert("Login before Like"); return }
+        const media = currentMedia[0];
+        const alreadyLiked = media.mediaLikes.filter((item: any) => item.user === userEmail);
+        if (alreadyLiked.length === 1) {
+            alert("You already liked this movie")
+            return
+        }
+        const mediaLikes = [...media.mediaLikes, { user: `${userEmail}` }];
+        setCurrentMedia([{ ...media, mediaLikes }]);
+        persist({ mediaLikes });
     }
 
     const addComment = () => {
-        if (!likeDisabled || userEmail !== null) {
-            if (comment === "") {
-                alert("Please insert Comment !")
-            } else {
-                mediaRef.doc(routeData.docId).set(
-                    { mediaComments: [...currentMedia[0].mediaComments, { comment: `${comment}`, commentAuthor: `${userEmail}` }] },
-                    { merge: true })
-                setComment('')
-                setReload(!refresh)
-            }
-        } else { alert("Login before adding comments") }
+        if (!loggedIn || !userEmail) { alert("Login before adding comments"); return }
+        if (comment === "") { alert("Please insert Comment !"); return }
+        const media = currentMedia[0];
+        const mediaComments = [...media.mediaComments, { comment: `${comment}`, commentAuthor: `${userEmail}` }];
+        setCurrentMedia([{ ...media, mediaComments }]);
+        persist({ mediaComments });
+        setComment('')
+    }
+
+    if (loadError) {
+        return (
+            <div className="base-flex watch-screen">
+                <div className="notification-plate">
+                    <h4>{loadError}</h4>
+                    <PrimaryButton onClick={() => { history.push({ pathname: '/' }) }} title={"Back to Home"}>
+                        <AiFillHome />
+                    </PrimaryButton>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -91,7 +114,7 @@ export default function WatchScreen() {
                             <h2>{currentMedia[0].mediaName}</h2>
                             <div className="base-flex">
                                 <span><AiFillStar /> {currentMedia[0].mediaStar}/5</span>
-                                <span>{currentMedia[0].mediaGenre}</span>
+                                <span>{currentMedia[0].mediaGenre.replace(/\|/g, ' · ')}</span>
                                 <PrimaryButton disabled={likeDisabled} onClick={addLike} title={`Likes : ${currentMedia[0].mediaLikes.length}`} size={'sm'} >
                                     <AiFillLike />
                                 </PrimaryButton>

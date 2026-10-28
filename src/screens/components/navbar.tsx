@@ -13,6 +13,7 @@ export default function NavBar(props: any) {
                 <Link to={{ pathname: "/" }} className="base-flex nav-links"> Home</Link>
                 <Link to={{ pathname: "/movies" }} className="base-flex nav-links"> Movies</Link>
                 <Link to={{ pathname: "/shows" }} className="base-flex nav-links"> Shows</Link>
+                <Link to={{ pathname: "/live" }} className={`base-flex nav-links ${props.mode === "Live" ? "nav-links-active" : ""}`}> Live</Link>
             </div>
             <div className="base-flex nav-bar-div logout-holder">
                 <Link to={{ pathname: "/profile" }} className="base-flex nav-links user-links"> <RiAccountCircleFill size={28} /></Link>

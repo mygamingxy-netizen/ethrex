@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">UragonTv</string>
+    <string name="title_activity_main">UragonTv</string>
+    <string name="package_name">com.uragontv.app</string>
+    <string name="custom_url_scheme">com.uragontv.app</string>
+</resources>

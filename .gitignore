@@ -19,5 +19,18 @@
 .env.production.local
 
 npm-debug.log*
+dev-server.log*
+gradle-build.log*
 yarn-debug.log*
 yarn-error.log*
+
+# capacitor / android build output
+/android/app/src/main/assets/public
+/android/app/src/main/assets/capacitor.config.json
+/android/capacitor-cordova-android-plugins
+/android/.gradle
+/android/build
+/android/app/build
+/android/local.properties
+/android/.idea
+/android/*.iml

@@ -21,3 +21,16 @@ ReactDOM.render(
 
 
 reportWebVitals();
+
+// Android hardware back button: step back through the app, leave it from the home screen.
+if (window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform()) {
+    import('@capacitor/app').then((module) => {
+        module.App.addListener('backButton', ({ canGoBack }) => {
+            if (window.location.pathname !== '/' && canGoBack) {
+                window.history.back();
+            } else {
+                module.App.exitApp();
+            }
+        });
+    }).catch(() => { /* plugin not bundled: the platform default applies */ });
+}

@@ -1,26 +1,23 @@
 import { AiFillStar } from 'react-icons/ai'
 import PrimaryButton from './primaryButton'
-import { projectFirestore } from '../../firebase/config'
+import { getBanner } from '../../data/source'
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 
 export default function Banner(props: any) {
 
-    const mediaRef = projectFirestore.collection('mediaBanners');
     const history = useHistory()
 
     const [bannerMedia, setBannerMedia] = useState<any>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    useEffect(() => { getBannerMedia() }, [])
+    useEffect(() => { getBannerMedia() }, [props.mode])
 
     const getBannerMedia = () => {
-        let pack: any = [];
-        mediaRef.doc(`${props.mode !== "home" ? props.mode === "Show" ? "showBanner" : "movieBanner" : "homeBanner"}`).onSnapshot((doc: any) => {
-            pack.push(doc.data())
-            setBannerMedia(pack)
-            setIsLoading(false)
-        })
+        getBanner(props.mode).then((banner: any) => {
+            setBannerMedia(banner ? [banner] : []);
+            setIsLoading(false);
+        }).catch(() => { setBannerMedia([]); setIsLoading(false); })
     }
 
     const cardTap = (cardData: any) => {
@@ -29,7 +26,7 @@ export default function Banner(props: any) {
     }
 
     return (
-        !isLoading ?
+        !isLoading && bannerMedia.length !== 0 ?
             <div className="base-flex banner">
                 <div className="banner-img-holder">
                     <img className="banner-img" src={bannerMedia[0].showPic} alt="Banner Show or Movie Poster " />
@@ -40,8 +37,8 @@ export default function Banner(props: any) {
                         <h1 className="banner-show-name">{bannerMedia[0].showName}</h1>
                         <div className="base-flex banner-show-stats">
                             <span className="base-flex"><AiFillStar size={20} /><span>{bannerMedia[0].showStars}/5</span></span>
-                            <span className="base-flex">2018</span>
-                            <span className="base-flex">{bannerMedia[0].showSeason} Seasons</span>
+                            {bannerMedia[0].showYear && <span className="base-flex">{bannerMedia[0].showYear}</span>}
+                            {bannerMedia[0].showSeason && <span className="base-flex">{bannerMedia[0].showSeason}</span>}
                         </div>
                         <p className="banner-show-bio">
                             {bannerMedia[0].showBio}

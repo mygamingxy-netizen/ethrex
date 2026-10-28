@@ -467,7 +467,387 @@ $mobile-tablet: 480px;
   .signin-card,.signup-card{width: 90%;}
   .profile-screen .profile-card-holder{width: 70%;}
   .profile-screen .profile-card{flex-direction: column;}
-  .profile-screen .profile-card div.profile-data{width: 50%;align-items: center;}
-  .profile-screen .profile-card .img-holder{display: flex;align-items: center;}
+  .profile-screen .profile-card div.profile-data{width: 50%;align-items: center;}  .profile-screen .profile-card .img-holder{display: flex; align-items: center;}
   .profile-screen .profile-card div.profile-data div{margin-top: 1rem;}
+}
+
+// ---------------------------------------------------------------------------
+// Live channels
+// ---------------------------------------------------------------------------
+.live-dot{
+  color: $theme-red;
+  font-size: 0.72rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  padding: 2px 6px;
+  border: 1px solid $theme-red;
+  border-radius: 4px;
+  font-style: normal;
+}
+
+.live-screen{
+  padding-top: 70px;
+  flex-direction: column;
+  align-items: center;
+  font-family: lato-light;
+
+  .live-head{
+    width: 95%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    h1{margin: 10px 0px 2px; font-size: 2.2rem;}
+    p{margin: 0; color: darkgray;}
+  }
+}
+
+.group-row{
+  width: 95%;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin: 18px 0px 6px;
+
+  .group-chip{
+    background-color: #262626;
+    color: white;
+    border: 1px solid #3a3a3a;
+    border-radius: 20px;
+    padding: 8px 18px;
+    margin: 4px 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: ease 0.2s;
+    &:hover{border-color: $theme-red;}
+  }
+  .group-active{background-color: $theme-red; border-color: $theme-red;}
+}
+
+.channel-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 14px;
+  width: 95%;
+  margin-top: 14px;
+
+  .channel-card{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #1b1b1b;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 14px;
+    min-height: 96px;
+    cursor: pointer;
+    text-align: left;
+    color: white;
+    transition: ease 0.2s;
+    &:hover{border-color: $theme-red; background-color: #222;}
+
+    .channel-logo{
+      width: 56px;
+      height: 56px;
+      min-width: 56px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: white;
+      letter-spacing: 1px;
+    }
+
+    .channel-meta{
+      flex: 1;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding-left: 12px;
+      h3{margin: 0 0 3px; font-size: 1.05rem;}
+      p{
+        margin: 4px 0 0;
+        color: darkgray;
+        font-size: 0.85rem;
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+    }
+
+    .channel-group{color: darkgray; font-size: 0.8rem;}
+    .live-dot{position: absolute; top: 12px; right: 12px;}
+  }
+}
+
+.channel-screen{
+  width: 100%;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  font-family: lato-light;
+
+  .channel-head{
+    width: 95%;
+    justify-content: space-between;
+    margin-top: 74px;
+    margin-bottom: 8px;
+    span.now-playing{font-weight: bold; display: flex; align-items: center; gap: 8px;}
+
+    .back-btn{
+      display: flex;
+      align-items: center;
+      background-color: #262626;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 16px;
+      font-size: 1rem;
+      cursor: pointer;
+      &:hover{background-color: $theme-red;}
+    }
+
+    .head-actions{
+      gap: 8px;
+      .icon-btn{
+        background-color: #262626;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 9px 12px;
+        cursor: pointer;
+        &:hover{background-color: $theme-red;}
+      }
+    }
+  }
+}
+
+.hls-holder{
+  position: relative;
+  width: 100%;
+  background-color: black;
+  .hls-video{
+    display: block;
+    width: 100%;
+    max-height: 68vh;
+    aspect-ratio: 16 / 9;
+    background-color: black;
+  }
+  .hls-error{
+    position: absolute;
+    inset: 0;
+    flex-direction: column;
+    background-color: #000000cc;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    h4{margin: 0 0 6px;}
+    p{margin: 0; color: darkgray;}
+  }
+}
+
+.player-holder{width: 95%;}
+
+.channel-about{
+  width: 95%;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-top: 16px;
+  h2{margin: 0 0 4px;}
+  p{margin: 6px 0 0; color: darkgray; white-space: normal;}
+}
+
+.more-channels{
+  width: 95%;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin: 24px 0px 40px;
+  h3{margin: 0 0 10px;}
+}
+
+.channel-strip{
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  white-space: nowrap;
+  width: 100%;
+  padding-bottom: 6px;
+  scroll-behavior: smooth;
+  &::-webkit-scrollbar{display: none;}
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  .channel-chip{
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #1b1b1b;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 8px 14px 8px 8px;
+    margin: 0 8px 8px 0;
+    cursor: pointer;
+    color: white;
+    &:hover{border-color: $theme-red;}
+    .channel-logo.sm{
+      width: 38px;
+      height: 38px;
+      min-width: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: white;
+    }
+    .channel-chip-name{margin-left: 10px; font-size: 0.95rem;}
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Keyboard focus (works with a remote in TV mode and with Tab on the web)
+// ---------------------------------------------------------------------------
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
+  outline: 3px solid $theme-red;
+  outline-offset: 2px;
+}
+
+.grid-card:focus .gird-data{transform: scale(100%); opacity: 1;}
+.grid-card:focus{transform: scale(95%);}
+
+// ---------------------------------------------------------------------------
+// Android TV / leanback layout
+// ---------------------------------------------------------------------------
+.tv-mode{
+  font-size: 1.15rem;
+
+  .bottom-nav{display: none;}
+
+  .nav-bar{
+    .nav-bar-div a.nav-links{
+      font-size: 1.45rem;
+      padding: 14px 24px;
+      margin: 16px 6px;
+      border: 3px solid transparent;
+      border-radius: 10px;
+      &:hover{color: white; background-color: #262626;}
+    }
+    img.logo{width: 150px;}
+    .logout-holder a.user-links{padding: 14px;}
+  }
+
+  .main-body{width: 100%;}
+
+  .banner{
+    height: 660px;
+    .banner-content-holder .banner-content{
+      width: 45%;
+      padding-left: 3rem;
+      .banner-show-name{font-size: 3.2rem;}
+      p.banner-show-bio{font-size: 1.25rem; line-height: 1.5;}
+      .primary-btn{font-size: 1.3rem; padding: 14px 18px; margin-top: 24px;}
+    }
+  }
+
+  .show-grid .grid-wrapper{
+    width: 97%;
+    font-size: 1.3rem;
+    .grid-head h3{font-size: 1.5rem;}
+    .grid-card{
+      width: 230px;
+      height: 330px;
+      margin: 10px 8px;
+      border: 3px solid transparent;
+      .gird-data{
+        transform: scale(60%);
+        span{font-size: 1.15rem;}
+        h3{font-size: 1.35rem;}
+      }
+      &:focus{transform: scale(97%); border-color: white; box-shadow: 0 0 0 4px $theme-red;}
+      &:focus .gird-data{transform: scale(100%); opacity: 1;}
+      &:hover{transform: scale(97%); border-color: white;}
+      &:hover .gird-data{transform: scale(100%); opacity: 1;}
+    }
+  }
+
+  .live-screen{
+    padding-top: 96px;
+    .live-head h1{font-size: 3rem;}
+    .live-head p{font-size: 1.3rem;}
+  }
+
+  .group-row .group-chip{
+    font-size: 1.25rem;
+    padding: 12px 26px;
+    margin: 6px 10px;
+    border-width: 2px;
+  }
+
+  .channel-grid{
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 18px;
+    .channel-card{
+      min-height: 128px;
+      padding: 18px;
+      border-width: 3px;
+      .channel-logo{width: 74px; height: 74px; min-width: 74px; font-size: 1.5rem;}
+      .channel-meta h3{font-size: 1.35rem;}
+      .channel-meta p{font-size: 1rem;}
+      .channel-group{font-size: 1rem;}
+      &:focus{border-color: white; box-shadow: 0 0 0 4px $theme-red; background-color: #222;}
+    }
+  }
+
+  .channel-screen{
+    .channel-head{
+      margin-top: 104px;
+      span.now-playing{font-size: 1.6rem;}
+      .back-btn{font-size: 1.25rem; padding: 14px 22px;}
+      .head-actions .icon-btn{padding: 14px 16px;}
+    }
+    .channel-about h2{font-size: 2rem;}
+    .channel-about p{font-size: 1.2rem;}
+    .more-channels h3{font-size: 1.4rem;}
+  }
+
+  .channel-strip .channel-chip{
+    padding: 12px 20px 12px 12px;
+    border-width: 3px;
+    .channel-chip-name{font-size: 1.2rem;}
+    &:focus{border-color: white; box-shadow: 0 0 0 4px $theme-red;}
+  }
+
+  .watch-screen{
+    .media-head span.now-playing{font-size: 1.4rem;}
+    .primary-btn{font-size: 1.2rem; padding: 14px 16px;}
+    .about-holder h2{font-size: 2.2rem;}
+    .about-holder p{font-size: 1.25rem; line-height: 1.6;}
+    video{outline: none;}
+  }
+
+  // Remote focus everywhere else.
+  a:focus, button:focus, [tabindex]:focus{
+    outline: 3px solid white;
+    outline-offset: 3px;
+  }
+  .primary-btn:focus{background-color: #9e0000; box-shadow: 0 0 0 4px white;}
+  .group-chip:focus{background-color: $theme-red; border-color: white;}
+  .back-btn:focus, .icon-btn:focus{background-color: $theme-red;}
+}
+
+$mobile-tablet: 480px;
+@media (max-width: $mobile-tablet) {
+  .channel-grid{grid-template-columns: 1fr;}
+  .live-screen{padding-top: 86px; .live-head h1{font-size: 1.8rem;}}
+  .channel-screen .channel-head{flex-wrap: wrap; gap: 8px; margin-top: 78px;}
+  .channel-screen .channel-head span.now-playing{width: 100%; justify-content: center;}
+  .player-holder{width: 100%;}
+  .group-row{padding: 0 8px;}
 }

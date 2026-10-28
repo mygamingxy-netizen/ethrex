@@ -66,7 +66,7 @@ export default function LoginScreen() {
         <div className="base-flex sign-screen">
             <div className={`base-flex signin-card ${signInClass}`}>
                 <div>
-                    <img src={logo} alt="Ethrex popcorn bucket Logo  for signUP or Login card." />
+                    <img src={logo} alt="UragonTv popcorn bucket logo for sign up or login card." />
                     <h2>Sign In</h2>
                 </div>
                 <form action="" method="post">
@@ -84,7 +84,7 @@ export default function LoginScreen() {
 
             <div className={`base-flex signup-card ${signUpClass}`}>
                 <div>
-                    <img src={logo} alt="Ethrex popcorn bucket Logo  for signUP or Login card." />
+                    <img src={logo} alt="UragonTv popcorn bucket logo for sign up or login card." />
                     <h2>Sign Up</h2>
                 </div>
                 <form action="" method="post">
